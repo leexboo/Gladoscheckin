@@ -50,10 +50,21 @@ if __name__ == '__main__':
 
                 # 获取账号当前状态
                 result = state.json()
-                # 获取剩余时间
-                leftdays = int(float(result['data']['leftDays']))
-                # 获取账号email
-                email = result['data']['email']
+                
+                # Add validation before accessing nested keys
+                if 'data' in result and result['data']:
+                    leftdays = int(float(result['data']['leftDays']))
+                    email = result['data']['email']
+                else:
+                    # Handle the case when 'data' key is missing
+                    print(f"Error: Invalid API response - {result}")
+                    leftdays = None
+                    email = "unknown"
+                    message_status = "API返回格式错误，请检查..."
+                    message_days = "error"
+                    fail += 1
+                    context += "账号: " + email + ", P: " + str(points) +", 剩余: " + message_days + " | "
+                    continue
                 
                 print(check_result)
                 if "Checkin! Got" in check_result:
