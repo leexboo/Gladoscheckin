@@ -49,29 +49,11 @@ if __name__ == '__main__':
                 points = result.get('points')
 
                 # 获取账号当前状态
-                if state.status_code == 200:
-                    result = state.json()
-                    # Validate that 'data' key exists in response
-                    if 'data' in result and result['data']:
-                        leftdays = int(float(result['data'].get('leftDays', 0)))
-                        email = result['data'].get('email', 'unknown')
-                    else:
-                        leftdays = 0
-                        email = "unknown"
-                        message_status = "获取账户状态失败，响应数据异常"
-                        print(f"Error: Invalid API response - {result}")
-                        fail += 1
-                        message_days = "error"
-                        context += "账号: " + email + ", P: " + str(points) +", 剩余: " + message_days + " | "
-                        continue
-                else:
-                    leftdays = 0
-                    email = "unknown"
-                    message_status = "获取账户状态请求失败"
-                    fail += 1
-                    message_days = "error"
-                    context += "账号: " + email + ", P: " + str(points) +", 剩余: " + message_days + " | "
-                    continue
+                result = state.json()
+                # 获取剩余时间
+                leftdays = int(float(result['data']['leftDays']))
+                # 获取账号email
+                email = result['data']['email']
                 
                 print(check_result)
                 if "Checkin! Got" in check_result:
